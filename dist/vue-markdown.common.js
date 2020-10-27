@@ -197,7 +197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    toc: {
 	      type: Boolean,
-	      default: false
+	      default: true
 	    },
 	    tocId: {
 	      type: String
@@ -277,6 +277,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      langPrefix: this.langPrefix,
 	      quotes: this.quotes
 	    });
+
 	    this.md.renderer.rules.table_open = function () {
 	      return '<table class="' + _this.tableClass + '">\n';
 	    };
@@ -295,7 +296,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	      return defaultLinkRenderer(tokens, idx, options, env, self);
 	    };
-
 	    if (this.toc) {
 	      this.md.use(_markdownItTocAndAnchor2.default, {
 	        tocClassName: this.tocClass,
@@ -309,9 +309,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        tocCallback: function tocCallback(tocMarkdown, tocArray, tocHtml) {
 	          if (tocHtml) {
 	            if (_this.tocId && document.getElementById(_this.tocId)) {
-	              document.getElementById(_this.tocId).innerHTML = tocHtml;
+	              document.getElementById(_this.tocId).innerHTML += tocHtml;
 	            }
-
 	            _this.$emit('toc-rendered', tocHtml);
 	          }
 	        }
@@ -322,6 +321,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    outHtml = this.postrender(outHtml);
 
 	    this.$emit('rendered', outHtml);
+
 	    return createElement('div', {
 	      domProps: {
 	        innerHTML: outHtml
@@ -369,7 +369,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this2.$forceUpdate();
 	      });
 	    });
-	  }
+	  },
+	  mounted: function mounted() {}
 	};
 
 /***/ }),

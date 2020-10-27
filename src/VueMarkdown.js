@@ -81,7 +81,7 @@ export default {
     },
     toc: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     tocId: {
       type: String,
@@ -162,6 +162,7 @@ export default {
       langPrefix: this.langPrefix,
       quotes: this.quotes,
     })
+
     this.md.renderer.rules.table_open = () => `<table class="${this.tableClass}">\n`
     let defaultLinkRenderer = this.md.renderer.rules.link_open ||
       function (tokens, idx, options, env, self) {
@@ -179,7 +180,6 @@ export default {
       })
       return defaultLinkRenderer(tokens, idx, options, env, self)
     }
-
     if (this.toc) {
       this.md.use(toc, {
         tocClassName: this.tocClass,
@@ -193,15 +193,14 @@ export default {
         tocCallback: (tocMarkdown, tocArray, tocHtml) => {
           if (tocHtml) {
             if (this.tocId && document.getElementById(this.tocId)) {
-              document.getElementById(this.tocId).innerHTML = tocHtml
+              document.getElementById(this.tocId).innerHTML += tocHtml
             }
-
             this.$emit('toc-rendered', tocHtml)
           }
         },
       })
     }
-
+    
     let outHtml = this.show ?
       this.md.render(
         this.prerender(this.sourceData)
@@ -209,6 +208,7 @@ export default {
     outHtml = this.postrender(outHtml);
 
     this.$emit('rendered', outHtml)
+
     return createElement(
       'div', {
         domProps: {
@@ -236,5 +236,7 @@ export default {
         this.$forceUpdate()
       })
     })
+  },
+  mounted() {
   },
 }
